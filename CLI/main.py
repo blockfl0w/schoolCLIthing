@@ -102,7 +102,7 @@ def authenticateUser(usernameAttempt):
       newUser['password'] = password.strip()
       newUser['role'] = "user"
       
-      users['users'].append(newUser)
+      users.append(newUser)
       
       file = open("./data/users.json", "w")
       json.dump(users, file)
