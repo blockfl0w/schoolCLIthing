@@ -4,42 +4,6 @@ import datetime
 import os
 from getpass import getpass
 
-BLACK = '\033[30m'
-RED = '\033[31m'
-GREEN = '\033[32m'
-YELLOW = '\033[33m' # orange on some systems
-BLUE = '\033[34m'
-MAGENTA = '\033[35m'
-CYAN = '\033[96m'
-LIGHT_GRAY = '\033[37m'
-DARK_GRAY = '\033[90m'
-BRIGHT_RED = '\033[91m'
-BRIGHT_GREEN = '\033[92m'
-BRIGHT_YELLOW = '\033[93m'
-BRIGHT_BLUE = '\033[94m'
-BRIGHT_MAGENTA = '\033[95m'
-BRIGHT_CYAN = '\033[96m'
-WHITE = '\033[97m'
-
-RESET = '\033[0m' # called to return to standard terminal text color
-
-print(BLACK + "black" + RESET)
-print(RED + "red" + RESET)
-print(GREEN + "green" + RESET)
-print(YELLOW + "yellow" + RESET)
-print(BLUE + "blue" + RESET)
-print(MAGENTA + "magenta" + RESET)
-print(CYAN + "cyan" + RESET)
-print(LIGHT_GRAY + "light gray" + RESET)
-print(DARK_GRAY + "dark gray" + RESET)
-print(BRIGHT_RED + "bright red" + RESET)
-print(BRIGHT_GREEN + "bright green" + RESET)
-print(BRIGHT_YELLOW + "bright yellow" + RESET)
-print(BRIGHT_BLUE + "bright blue" + RESET)
-print(BRIGHT_MAGENTA + "bright magenta" + RESET)
-print(BRIGHT_CYAN + "bright cyan" + RESET)
-print(WHITE + "white" + RESET)
-
 logo = r"""
  ______   ______   ______  ______   ______  ______  ______    
 /\  == \ /\  ___\ /\  == \/\  __ \ /\  == \/\__  _\/\  == \   
@@ -136,7 +100,7 @@ def reportAdd():
   
   # auto generate a name if the user didn't enter one
   if name == "":
-    name = f"Report for {teacher} at {date} by {"Anonymous" if anonymous == "y" or anonymous == "yes" else username}"
+    name = f"Report for {teacher} at {date} by {'Anonymous' if anonymous == 'y' or anonymous == 'yes' else username}"
     
   # add data to a dictionary
   report = {}
@@ -202,7 +166,7 @@ def reportView(args):
         printReport(report, user=True)
         
         if len(reports) - (i + 1) != 0:
-          prompt = input(f"Would you like to view the next report ({len(reports) - (i + 1)} left)? (Y/n)").lower()
+          prompt = input(f'Would you like to view the next report ({len(reports) - (i + 1)} left)? (Y/n)').lower()
           if prompt == "n" or prompt == "no":
             break
           
@@ -236,7 +200,7 @@ def reportView(args):
           return
         
 def deleteReport(reports, report, account=False):
-  conformation = input(f"Are you sure you want to delete this {"account" if account else "report"}? (Y/n)").lower()
+  conformation = input(f"Are you sure you want to delete this {'account' if account else 'report'}? (Y/n)").lower()
   
   print(report)
   if conformation == "y" or conformation == "yes" or conformation == "":
