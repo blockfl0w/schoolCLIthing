@@ -1,4 +1,4 @@
 {
   "cSpell.words": ["pywinstyles"],
-  "cSpell.enableFiletypes": ["!python"]
+  "cSpell.enableFiletypes": ["!json", "!python"]
 }

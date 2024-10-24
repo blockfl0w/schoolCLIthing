@@ -1,7 +1,9 @@
-import tkinter
+import tkinter as tk
 from tkinter import ttk
 
-from components import Input, Infomation
+from helpers import createAuthForm, getUserReports
+
+from components import Input, Infomation, NavButton, Navigation, ReportPreview
 
 # modules that makes tkinter look good
 import sv_ttk
@@ -19,37 +21,55 @@ def showSignUp():
     signUpFrame.pack()
 
 
+def openMainWindow(pastFrame):
+    pastFrame.pack_forget()
+
+    nav = Navigation(
+        mainWindowFrame,
+        user,
+        [showSignUp, showSignUp, showSignUp, showSignUp, showSignUp],
+    )
+
+    homeLabel = ttk.Label(contentFrame, text="Home", font=("Arial", 20, "bold"))
+
+    recentReportsFrame = ttk.Frame(contentFrame)
+    recentReports = ttk.Label(recentReportsFrame, text="Recent reports")
+
+    userReports = getUserReports(user)
+
+    print(userReports)
+    for i in userReports:
+        report = ReportPreview(recentReportsFrame, i, userReports.index(i))
+
+    recentReports.grid(row=0, column=0)
+    recentReportsFrame.grid(row=2, column=0)
+    homeLabel.grid(row=0, column=0)
+    contentFrame.grid(row=0, column=1, padx=10, pady=10)
+
+    mainWindowFrame.pack()
+
+
+# The current user
+user = {
+    "username": "",
+    "role": "",
+}
+
 # The main window
-root = tkinter.Tk()
+root = tk.Tk()
+root.geometry("1000x600")
 
 # The frame for the sign up form
 signUpFrame = ttk.Frame(root)
 
-usernameEntry = Input(signUpFrame, "Username")
-passwordEntry = Input(signUpFrame, "Password")
-infomationLabel = Infomation(
-    signUpFrame,
-    "Passwords should be at least 8 characters long and contain a capital letter, number and a special character.",
-)
-
-signUpButton = ttk.Button(signUpFrame, text="Sign Up")
-
-usernameEntry.pack()
-passwordEntry.pack()
-signUpButton.pack()
+# create the form for the signUp
+createAuthForm(signUpFrame, user, openMainWindow, "signUp")
 
 # The frame for the login form
 loginFrame = ttk.Frame(root)
 
-# Add the inputs for login
-usernameEntry = Input(loginFrame, "Username")
-passwordEntry = Input(loginFrame, "Password")
-
-submitButton = ttk.Button(loginFrame, text="Login")
-
-usernameEntry.pack()
-passwordEntry.pack()
-submitButton.pack()
+# create the form for the login
+createAuthForm(loginFrame, user, openMainWindow, "login")
 
 # A wellcome screen for the app
 wellcomeFrame = ttk.Frame(root)
@@ -73,6 +93,12 @@ wellcomeSubtext.pack()
 loginButton.pack()
 createAccountButton.pack()
 wellcomeFrame.pack()
+
+# Main window
+mainWindowFrame = ttk.Frame(root)
+
+contentFrame = tk.Frame(mainWindowFrame, width=800, height=600)
+contentFrame.grid_propagate(False)
 
 
 # Sets the theme to dark

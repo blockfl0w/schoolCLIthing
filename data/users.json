@@ -1,1 +1,7 @@
-[{"username": "admin", "password": "password", "role": "admin"}, {"username": "charlie", "password": "password", "role": "user"}, {"username": "Jack", "password": "password", "role": "user"}]
+[
+  {
+    "username": "blockflow",
+    "role": "user",
+    "password": "$2b$12$tXzx4iMVMo2sURgKkU6ZR.7U2044sCtpLP/bJ9dV0GzL4SOvNCkRS"
+  }
+]

@@ -5,12 +5,10 @@ from PIL import Image, ImageTk
 
 # create a custom widget
 class Input(tk.Frame):
-    def __init__(self, master, label):
+    def __init__(self, master, label, show=None):
         super().__init__(master)
         self.label = ttk.Label(self, text=label, anchor=tk.W)
-        self.entry = ttk.Entry(
-            self,
-        )
+        self.entry = ttk.Entry(self, show=show if show else "")
         self.label.pack(anchor="w")
         self.entry.pack(pady=(5, 10))
         self.pack()
@@ -20,22 +18,75 @@ class Infomation(tk.Frame):
     def __init__(self, master, label):
         super().__init__(master)
 
-        # Create an image with a semi-transparent background
-        width, height = 200, 50  # Adjust the size as needed
-        background_color = (255, 247, 0, 12)  # RGBA: light blue with 50% opacity
-        image = Image.new("RGBA", (width, height), background_color)
-        self.background_image = ImageTk.PhotoImage(image)
-
         # Create a label with the image as the background
         self.label = ttk.Label(
             self, text=label, anchor=tk.W, borderwidth=2, relief="solid"
         )
         self.label.pack(anchor="w")
 
-        # Create a canvas to place the label on top of the image
-        self.canvas = tk.Canvas(self, width=width, height=height)
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.background_image)
-        self.canvas.create_window(0, 0, anchor=tk.NW, window=self.label)
-        self.canvas.pack()
-
         self.pack()
+
+
+class NavButton(tk.Frame):
+    def __init__(self, master, text, command):
+        super().__init__(master)
+        self.button = tk.Button(
+            self,
+            text=text,
+            command=command,
+            font=("Arial", 12),
+            justify="center",
+            width="19",
+            cursor="hand2",
+            pady=10,
+            border=0,
+            background="#2e2e2e",
+        )
+        self.button.pack()
+        self.pack()
+
+
+class Navigation(tk.Frame):
+    def __init__(self, master, user, commands):
+        super().__init__(master)
+
+        self.config(width="200", background="#2e2e2e", height="600", padx=10)
+        self.grid_propagate(False)
+
+        self.homeButton = NavButton(self, text="Home", command=commands[0])
+        self.reportsButton = NavButton(self, text="Reports", command=commands[1])
+
+        self.usersButton = NavButton(self, text="Users", command=commands[3])
+        self.teacherButton = NavButton(self, text="Teachers", command=commands[4])
+
+        self.accountButton = NavButton(self, text="Account", command=commands[2])
+
+        self.homeButton.grid(row=0, column=0, pady=5)
+        self.reportsButton.grid(row=1, column=0, pady=5)
+        self.usersButton.grid(row=3, column=0, pady=5)
+        self.teacherButton.grid(row=4, column=0, pady=5)
+        self.accountButton.grid(row=2, column=0, pady=5)
+
+        self.grid(row=0, column=0, sticky="nsew")
+
+
+class ReportPreview(tk.Frame):
+    def __init__(self, master, report, collumn):
+        super().__init__(master)
+
+        self.config(background="#2e2e2e", padx=10, pady=10)
+
+        self.reportLabel = ttk.Label(
+            self, text=report["name"], font=("Arial", 12, "bold"), background="#2e2e2e"
+        )
+        self.teacherLabel = ttk.Label(
+            self,
+            text=report["teacher"],
+            font=("Arial", 10),
+            foreground="#e0e0e0",
+            background="#2e2e2e",
+        )
+        self.reportLabel.grid(column=0, row=0, pady=5)
+        self.teacherLabel.grid(column=0, row=1, pady=5)
+
+        self.grid(row=1, column=collumn, padx=10, pady=10)
