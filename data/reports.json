@@ -1,1 +1,52 @@
-[{"name": "exampleReport", "stars": 0, "reporter": "blockflow", "report": "This is an example report.", "date": "2024/10/15", "teacher": "Shawn Appleyard", "room": "T606", "subject": "Maths"}, {"name": "", "teacher": "", "subject": "", "room": "", "stars": "", "message": "", "reporter": "blockflow"}, {"name": "", "teacher": "", "subject": "", "room": "", "stars": "", "message": "", "reporter": "blockflow"}, {"name": "Report for shawn", "teacher": "Shawn appleyard", "subject": "Maths", "room": "T606", "stars": "3", "message": "YOU SUCK!", "reporter": "blockflow"}]
+[
+  {
+    "name": "exampleReport",
+    "stars": 0,
+    "reporter": "blockflow",
+    "message": "This is an example report.",
+    "date": "2024/10/15",
+    "teacher": "Shawn Appleyard",
+    "room": "T606",
+    "subject": "Maths"
+  },
+  {
+    "name": "Blockflow report",
+    "teacher": "Shawn Appleyard",
+    "subject": "T606",
+    "room": "T606",
+    "stars": "3",
+    "message": "Meh.",
+    "reporter": "blockflow",
+    "date": "24/10/2024"
+  },
+  {
+    "name": "helllo",
+    "teacher": "dinika",
+    "subject": "Comp Sci",
+    "room": "T606",
+    "stars": "5",
+    "message": "Very cool Very nice!",
+    "reporter": "blockflow",
+    "date": "24/10/2024"
+  },
+  {
+    "name": "bloooo",
+    "teacher": "dinikia",
+    "subject": "Comp sci",
+    "room": "T606",
+    "stars": "4",
+    "message": "This class sucks",
+    "reporter": "blockflow",
+    "date": "24/10/2024"
+  },
+  {
+    "name": "blonkas",
+    "teacher": "Dinikia",
+    "subject": "Comp sci ",
+    "room": "T606",
+    "stars": "2",
+    "message": "Hellllo",
+    "reporter": "blockflow",
+    "date": "24/10/2024"
+  }
+]

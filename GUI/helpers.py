@@ -167,7 +167,9 @@ def getUserReports(user):
     return reports
 
 
-def createReport(name, teacher, subject, room, stars, message, reporter, date):
+def createReport(
+    name, teacher, subject, room, stars, message, reporter, date, callBack, prev
+):
     file = open("./data/reports.json", "r")
     reports = json.load(file)
     file.close()
@@ -180,6 +182,7 @@ def createReport(name, teacher, subject, room, stars, message, reporter, date):
         "stars": stars,
         "message": message,
         "reporter": reporter,
+        "date": date,
     }
 
     reports.append(newReport)
@@ -187,3 +190,5 @@ def createReport(name, teacher, subject, room, stars, message, reporter, date):
     file = open("./data/reports.json", "w")
     json.dump(reports, file)
     file.close()
+
+    callBack(prev, newReport)

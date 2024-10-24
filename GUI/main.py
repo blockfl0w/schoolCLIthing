@@ -44,7 +44,8 @@ def openMainWindow(pastFrame):
     userReports = getUserReports(user)
 
     for i in userReports:
-        ReportPreview(recentReportsFrame, i, userReports.index(i))
+        report = ReportPreview(recentReportsFrame, i, userReports.index(i))
+        report.bind("<Button-1>", lambda e, i=i: openReport(homeFrame, i))
 
     recentReports.grid(row=0, column=0)
     recentReportsFrame.grid(row=2, column=0)
@@ -75,7 +76,7 @@ def openCreateReport(prev):
     room = Input(createReportFrame, "Room")
     stars = Input(createReportFrame, "Stars")
     message = Input(createReportFrame, "Message")
-    date = datetime.date.today()
+    date = datetime.date.today().strftime("%d/%m/%Y")
 
     # submit button
     submitButton = ttk.Button(
@@ -90,6 +91,8 @@ def openCreateReport(prev):
             message.entry.get(),
             user["username"],
             date,
+            reportSuccsess,
+            currentFrame,
         ),
     )
 
@@ -103,6 +106,88 @@ def openCreateReport(prev):
     submitButton.grid(column=0, row=6)
     createReportFrame.grid(column=2, row=0)
     mainWindowFrame.grid(column=0, row=0)
+
+
+def reportSuccsess(prev, report):
+    prev.grid_forget()
+
+    reportSuccsessFrame = ttk.Frame(contentFrame)
+    currentFrame = reportSuccsessFrame
+    Navigation(
+        mainWindowFrame,
+        user,
+        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        currentFrame,
+    )
+
+    titleReport = ttk.Label(
+        reportSuccsessFrame,
+        text="Report created successfully",
+        font=("Arial", 20, "bold"),
+        justify="center",
+    )
+
+    homeButton = ttk.Button(
+        reportSuccsessFrame,
+        text="Home",
+        command=lambda: openMainWindow(reportSuccsessFrame),
+    )
+    viewReportButton = ttk.Button(
+        reportSuccsessFrame,
+        text="View report",
+        command=lambda: openReport(reportSuccsessFrame, report),
+    )
+
+    titleReport.grid(row=0, column=0, columnspan=2)
+    homeButton.grid(row=1, column=0)
+    viewReportButton.grid(row=1, column=1)
+    reportSuccsessFrame.grid(row=0, column=0)
+
+
+def openReport(prev, report):
+    prev.grid_forget()
+
+    reportFrame = ttk.Frame(contentFrame)
+    currentFrame = reportFrame
+    Navigation(
+        mainWindowFrame,
+        user,
+        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        currentFrame,
+    )
+
+    title = ttk.Label(
+        reportFrame, text=report["name"], font=("Arial", 20, "bold"), justify="left"
+    )
+    credit = ttk.Label(
+        reportFrame,
+        text=f"By {report['reporter']} on {report['date']}",
+        font=("Arial", 8, "bold"),
+        foreground="#e0e0e0",
+    )
+    teacher = ttk.Label(
+        reportFrame,
+        text=f"Teacher: {report['teacher']}",
+        font=("Arial", 8, "bold"),
+        foreground="#e0e0e0",
+    )
+    stars = ttk.Label(
+        reportFrame,
+        text=f"{report['stars']}/5",
+        font=("Arial", 8, "bold"),
+        foreground="#e0e0e0",
+    )
+
+    content = ttk.Label(
+        reportFrame, text=report["message"], font=("Arial", 12), wraplength=800
+    )
+
+    title.grid(row=0, column=0, columnspan=4)
+    credit.grid(row=1, column=0, padx=10)
+    teacher.grid(row=1, column=1, padx=10)
+    stars.grid(row=1, column=2, padx=10)
+    content.grid(row=2, column=0, columnspan=4, pady=10)
+    reportFrame.grid(row=0, column=0)
 
 
 # The current user
