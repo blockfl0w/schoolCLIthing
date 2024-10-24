@@ -1,11 +1,1 @@
-[
-  {
-    "name": "exampleReport",
-    "stars": 0,
-    "reporter": "blockflow",
-    "report": "This is an example report.",
-    "date": "2024/10/15",
-    "teacher": "Shawn Appleyard",
-    "room": "T606"
-  }
-]
+[{"name": "exampleReport", "stars": 0, "reporter": "blockflow", "report": "This is an example report.", "date": "2024/10/15", "teacher": "Shawn Appleyard", "room": "T606", "subject": "Maths"}, {"name": "", "teacher": "", "subject": "", "room": "", "stars": "", "message": "", "reporter": "blockflow"}, {"name": "", "teacher": "", "subject": "", "room": "", "stars": "", "message": "", "reporter": "blockflow"}, {"name": "Report for shawn", "teacher": "Shawn appleyard", "subject": "Maths", "room": "T606", "stars": "3", "message": "YOU SUCK!", "reporter": "blockflow"}]

@@ -145,9 +145,9 @@ def createAuthForm(parent, user, callBack, type="login" or "signUp"):
         ),
     )
 
-    usernameEntry.pack()
-    passwordEntry.pack()
-    authButton.pack()
+    usernameEntry.grid(row=0, column=0)
+    passwordEntry.grid(row=1, column=0)
+    authButton.grid(row=2, column=0)
 
 
 def getUserReports(user):
@@ -165,3 +165,25 @@ def getUserReports(user):
             reports.append(report)
 
     return reports
+
+
+def createReport(name, teacher, subject, room, stars, message, reporter, date):
+    file = open("./data/reports.json", "r")
+    reports = json.load(file)
+    file.close()
+
+    newReport = {
+        "name": name,
+        "teacher": teacher,
+        "subject": subject,
+        "room": room,
+        "stars": stars,
+        "message": message,
+        "reporter": reporter,
+    }
+
+    reports.append(newReport)
+
+    file = open("./data/reports.json", "w")
+    json.dump(reports, file)
+    file.close()

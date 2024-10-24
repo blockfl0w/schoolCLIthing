@@ -9,9 +9,9 @@ class Input(tk.Frame):
         super().__init__(master)
         self.label = ttk.Label(self, text=label, anchor=tk.W)
         self.entry = ttk.Entry(self, show=show if show else "")
-        self.label.pack(anchor="w")
-        self.entry.pack(pady=(5, 10))
-        self.pack()
+        self.label.grid(column=0, row=0)
+        self.entry.grid(column=0, row=1, pady=(5, 10))
+        self.grid(column=0, row=0)
 
 
 class Infomation(tk.Frame):
@@ -22,9 +22,9 @@ class Infomation(tk.Frame):
         self.label = ttk.Label(
             self, text=label, anchor=tk.W, borderwidth=2, relief="solid"
         )
-        self.label.pack(anchor="w")
+        self.label.grid(column=0, row=0, pady=10)
 
-        self.pack()
+        self.grid(column=0, row=0)
 
 
 class NavButton(tk.Frame):
@@ -42,19 +42,23 @@ class NavButton(tk.Frame):
             border=0,
             background="#2e2e2e",
         )
-        self.button.pack()
-        self.pack()
+        self.button.grid(column=0, row=0)
+        self.grid(column=0, row=0)
 
 
 class Navigation(tk.Frame):
-    def __init__(self, master, user, commands):
+    def __init__(self, master, user, commands, currentFrame):
         super().__init__(master)
 
         self.config(width="200", background="#2e2e2e", height="600", padx=10)
         self.grid_propagate(False)
 
-        self.homeButton = NavButton(self, text="Home", command=commands[0])
-        self.reportsButton = NavButton(self, text="Reports", command=commands[1])
+        self.homeButton = NavButton(
+            self, text="Home", command=lambda: commands[0](currentFrame)
+        )
+        self.reportsButton = NavButton(
+            self, text="New report", command=lambda: commands[1](currentFrame)
+        )
 
         self.usersButton = NavButton(self, text="Users", command=commands[3])
         self.teacherButton = NavButton(self, text="Teachers", command=commands[4])
