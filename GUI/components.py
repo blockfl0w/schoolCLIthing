@@ -63,7 +63,9 @@ class Navigation(tk.Frame):
         self.usersButton = NavButton(self, text="Users", command=commands[3])
         self.teacherButton = NavButton(self, text="Teachers", command=commands[4])
 
-        self.accountButton = NavButton(self, text="Account", command=commands[2])
+        self.accountButton = NavButton(
+            self, text="Account", command=lambda: commands[2](currentFrame)
+        )
 
         self.homeButton.grid(row=0, column=0, pady=5)
         self.reportsButton.grid(row=1, column=0, pady=5)

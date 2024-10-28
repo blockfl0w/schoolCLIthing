@@ -192,3 +192,40 @@ def createReport(
     file.close()
 
     callBack(prev, newReport)
+
+
+def updateAccount(perviousUsername, newUsername, newPassword, userObj):
+    # Get contents from users file
+    file = open("./data/users.json", "r")
+    users = json.load(file)
+    file.close()
+
+    # Loop over users and update the user with the pervious username
+    for user in users:
+        if user["username"] == perviousUsername:
+            user["username"] = newUsername
+            if newPassword != "":
+                user["password"] = bcrypt.hashpw(
+                    newPassword.encode("utf-8"), bcrypt.gensalt()
+                ).decode("utf-8")
+
+    # Write the updated users to the file
+    file = open("./data/users.json", "w")
+    json.dump(users, file)
+    file.close()
+
+    # Get contents from reports file
+    file = open("./data/reports.json", "r")
+    reports = json.load(file)
+    file.close()
+
+    for report in reports:
+        if report["reporter"] == perviousUsername:
+            report["reporter"] = newUsername
+
+    # Write the updated reports to the file
+    file = open("./data/reports.json", "w")
+    json.dump(reports, file)
+    file.close()
+
+    userObj["username"] = newUsername

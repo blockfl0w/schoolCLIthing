@@ -3,7 +3,7 @@ from tkinter import ttk
 
 import datetime
 
-from helpers import createAuthForm, getUserReports, createReport
+from helpers import createAuthForm, getUserReports, createReport, updateAccount
 
 from components import Input, Infomation, NavButton, Navigation, ReportPreview
 
@@ -32,7 +32,7 @@ def openMainWindow(pastFrame):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
         currentFrame,
     )
 
@@ -42,6 +42,7 @@ def openMainWindow(pastFrame):
     recentReports = ttk.Label(recentReportsFrame, text="Recent reports")
 
     userReports = getUserReports(user)
+    print(userReports, user)
 
     for i in userReports:
         report = ReportPreview(recentReportsFrame, i, userReports.index(i))
@@ -66,7 +67,7 @@ def openCreateReport(prev):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
         currentFrame,
     )
     # all inputs needed to create a report
@@ -116,7 +117,7 @@ def reportSuccsess(prev, report):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
         currentFrame,
     )
 
@@ -152,7 +153,7 @@ def openReport(prev, report):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, showSignUp, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
         currentFrame,
     )
 
@@ -188,6 +189,49 @@ def openReport(prev, report):
     stars.grid(row=1, column=2, padx=10)
     content.grid(row=2, column=0, columnspan=4, pady=10)
     reportFrame.grid(row=0, column=0)
+
+
+def openAccount(prev):
+    prev.grid_forget()
+
+    accountFrame = ttk.Frame(contentFrame)
+    currentFrame = accountFrame
+    Navigation(
+        mainWindowFrame,
+        user,
+        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        currentFrame,
+    )
+
+    title = ttk.Label(accountFrame, text="Account", font=("Arial", 20, "bold"))
+
+    usernameFrame = ttk.Frame(accountFrame)
+    usernameLabel = ttk.Label(usernameFrame, text="Username")
+    userNameInput = ttk.Entry(usernameFrame, textvariable=user["username"])
+
+    passwordFrame = ttk.Frame(accountFrame)
+    passwordLabel = ttk.Label(passwordFrame, text="Password")
+    passwordInput = ttk.Entry(passwordFrame, text="Enter a password", show="*")
+
+    saveButton = ttk.Button(
+        accountFrame,
+        text="Save",
+        command=lambda: updateAccount(
+            user["username"], userNameInput.get(), passwordInput.get(), user
+        ),
+    )
+
+    title.grid(row=0, column=0, columnspan=2)
+    usernameFrame.grid(row=1, column=0)
+    usernameLabel.grid(row=0, column=0)
+    userNameInput.grid(row=0, column=1)
+
+    passwordFrame.grid(row=2, column=0)
+    passwordLabel.grid(row=0, column=0)
+    passwordInput.grid(row=0, column=1)
+
+    saveButton.grid(row=3, column=0, columnspan=2)
+    accountFrame.grid(row=0, column=0)
 
 
 # The current user
