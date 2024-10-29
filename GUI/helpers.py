@@ -76,11 +76,18 @@ def loginUser(username, password, userObj):
     users = json.load(file)
     file.close()
 
+    loginStatus = 400
     # loop over the users
     for user in users:
         # if the entered username is the same as the username in the file
         if user["username"] == username:
+
             # check the password to see if it is the same as stored hashed password
+            print(
+                bcrypt.checkpw(
+                    password.encode("utf-8"), user["password"].encode("utf-8")
+                )
+            )
             if bcrypt.checkpw(
                 password.encode("utf-8"), user["password"].encode("utf-8")
             ):
@@ -89,21 +96,25 @@ def loginUser(username, password, userObj):
                 userObj["role"] = user["role"]
 
                 # return succsess code
-                return 200
+                loginStatus = 200
+                return loginStatus
             else:
                 # if not return 401
-                return 401
+                loginStatus = 401
+                return loginStatus
         else:
             # if user cant be found return 404
-            return 404
+            loginStatus = 404
+            continue
 
     # return 400 by default just in case
-    return 400
+    return loginStatus
 
 
 def handleAuth(callBack, username, password, formType, user, parent):
     if formType == "login":
         status = loginUser(username, password, user)
+        print("Satus", status)
         if status == 200:
             callBack(parent)
         elif status == 401:
@@ -115,7 +126,7 @@ def handleAuth(callBack, username, password, formType, user, parent):
     else:
         status = createUser(username, password, "user")
         if status == "200":
-            callBack()
+            callBack(parent)
         else:
             Infomation(parent, "Username already taken")
 
@@ -150,14 +161,14 @@ def createAuthForm(parent, user, callBack, type="login" or "signUp"):
     authButton.grid(row=2, column=0)
 
 
-def getUserReports(user):
+def getUserReports(user, forceLoacal=False):
     file = open("./data/reports.json", "r")
     allReports = json.load(file)
     file.close()
 
     reports = []
 
-    if user["role"] == "admin":
+    if user["role"] == "admin" and not forceLoacal:
         return allReports
 
     for report in allReports:
@@ -229,3 +240,50 @@ def updateAccount(perviousUsername, newUsername, newPassword, userObj):
     file.close()
 
     userObj["username"] = newUsername
+
+
+def signOut(user, callback):
+    user["username"] = ""
+    user["role"] = ""
+
+    print(type(callback))
+    callback()
+
+
+def deleteAccount(username, callback):
+    # Get contents from users file
+    file = open("./data/users.json", "r")
+    users = json.load(file)
+    file.close()
+
+    for user in users:
+        if user["username"] == username:
+            users.remove(user)
+
+    # Write the updated users to the file
+    file = open("./data/users.json", "w")
+    json.dump(users, file)
+    file.close()
+
+    callback()
+
+
+def getUsers():
+    file = open("./data/users.json", "r")
+    users = json.load(file)
+    file.close()
+    return users
+
+
+def makeAdmin(username):
+    file = open("./data/users.json", "r")
+    users = json.load(file)
+    file.close()
+
+    for user in users:
+        if user["username"] == username:
+            user["role"] = "admin"
+
+    file = open("./data/users.json", "w")
+    json.dump(users, file)
+    file.close()

@@ -24,7 +24,7 @@ class Infomation(tk.Frame):
         )
         self.label.grid(column=0, row=0, pady=10)
 
-        self.grid(column=0, row=0)
+        self.grid(column=0, row=5)
 
 
 class NavButton(tk.Frame):
@@ -60,18 +60,27 @@ class Navigation(tk.Frame):
             self, text="New report", command=lambda: commands[1](currentFrame)
         )
 
-        self.usersButton = NavButton(self, text="Users", command=commands[3])
+        self.usersButton = NavButton(
+            self, text="Users", command=lambda: commands[3](currentFrame)
+        )
         self.teacherButton = NavButton(self, text="Teachers", command=commands[4])
 
         self.accountButton = NavButton(
             self, text="Account", command=lambda: commands[2](currentFrame)
         )
 
-        self.homeButton.grid(row=0, column=0, pady=5)
-        self.reportsButton.grid(row=1, column=0, pady=5)
-        self.usersButton.grid(row=3, column=0, pady=5)
-        self.teacherButton.grid(row=4, column=0, pady=5)
-        self.accountButton.grid(row=2, column=0, pady=5)
+        if user["role"] == "admin":
+            self.homeButton.grid(row=0, column=0, pady=5)
+            self.reportsButton.grid(row=1, column=0, pady=5)
+            self.usersButton.grid(row=3, column=0, pady=5)
+            self.teacherButton.grid(row=4, column=0, pady=5)
+            self.accountButton.grid(row=2, column=0, pady=5)
+        else:
+            self.teacherButton.grid_forget()
+            self.usersButton.grid_forget()
+            self.homeButton.grid(row=0, column=0, pady=5)
+            self.reportsButton.grid(row=1, column=0, pady=5)
+            self.accountButton.grid(row=2, column=0, pady=5)
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -80,10 +89,16 @@ class ReportPreview(tk.Frame):
     def __init__(self, master, report, collumn):
         super().__init__(master)
 
-        self.config(background="#2e2e2e", padx=10, pady=10)
+        self.config(
+            background="#2e2e2e",
+            padx=10,
+            pady=10,
+        )
 
         self.reportLabel = ttk.Label(
-            self, text=report["name"], font=("Arial", 12, "bold"), background="#2e2e2e"
+            self,
+            text=report["name"],
+            font=("Arial", 12, "bold"),
         )
         self.teacherLabel = ttk.Label(
             self,
@@ -94,5 +109,30 @@ class ReportPreview(tk.Frame):
         )
         self.reportLabel.grid(column=0, row=0, pady=5)
         self.teacherLabel.grid(column=0, row=1, pady=5)
+        if collumn < 7:
+            self.grid(row=1, column=collumn, padx=10, pady=10)
+        else:
+            self.grid(row=2, column=collumn - 7, padx=10, pady=10)
 
-        self.grid(row=1, column=collumn, padx=10, pady=10)
+
+class UserPreview(tk.Frame):
+    def __init__(self, master, user, collumn):
+        super().__init__(master)
+
+        self.config(
+            background="#2e2e2e",
+            padx=10,
+            pady=10,
+        )
+
+        self.reportLabel = ttk.Label(
+            self,
+            text=user["username"],
+            font=("Arial", 12, "bold"),
+        )
+
+        self.reportLabel.grid(column=0, row=0, pady=5)
+        if collumn < 7:
+            self.grid(row=1, column=collumn, padx=10, pady=10)
+        else:
+            self.grid(row=2, column=collumn - 7, padx=10, pady=10)

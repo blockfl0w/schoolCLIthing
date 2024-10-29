@@ -3,9 +3,25 @@ from tkinter import ttk
 
 import datetime
 
-from helpers import createAuthForm, getUserReports, createReport, updateAccount
+from helpers import (
+    createAuthForm,
+    getUserReports,
+    createReport,
+    updateAccount,
+    signOut,
+    deleteAccount,
+    getUsers,
+    makeAdmin,
+)
 
-from components import Input, Infomation, NavButton, Navigation, ReportPreview
+from components import (
+    Input,
+    Infomation,
+    NavButton,
+    Navigation,
+    ReportPreview,
+    UserPreview,
+)
 
 # modules that makes tkinter look good
 import sv_ttk
@@ -13,26 +29,50 @@ import pywinstyles, sys
 import darkdetect
 
 
+def openWellcome(prev):
+    print(prev)
+    if prev != None:
+        prev.grid_forget()
+
+    # container for buttons
+    buttonsFrame = ttk.Frame(wellcomeFrame)
+
+    # Button for the users to select wether to login or create an account
+    loginButton = ttk.Button(buttonsFrame, text="Login", command=showLogin)
+    createAccountButton = ttk.Button(
+        buttonsFrame, text="Create Account", command=showSignUp
+    )
+
+    # render all widgets in grid
+    wellcomeLabel.grid(row=0, column=0, columnspan=2, pady=10)
+    wellcomeSubtext.grid(row=1, column=0, columnspan=2, pady=10)
+    buttonsFrame.grid(row=2, column=0, columnspan=2)
+    loginButton.grid(row=0, column=0, padx=10)
+    createAccountButton.grid(row=0, column=1, padx=10)
+    wellcomeFrame.grid(row=3, column=0, columnspan=2, pady=20)
+
+
 def showLogin():
     wellcomeFrame.grid_forget()
-    loginFrame.grid(column=0, row=0, sticky="nsew")
+    loginFrame.grid(column=0, row=0, sticky="nsew", pady=200)
 
 
 def showSignUp():
     wellcomeFrame.grid_forget()
-    signUpFrame.grid(column=0, row=0, sticky="nsew")
+    signUpFrame.grid(column=0, row=0)
 
 
 def openMainWindow(pastFrame):
     pastFrame.grid_forget()
 
     homeFrame = ttk.Frame(contentFrame)
+    contentFrame.columnconfigure(10, weight=1)
     # set current frame
     currentFrame = homeFrame
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
         currentFrame,
     )
 
@@ -42,7 +82,6 @@ def openMainWindow(pastFrame):
     recentReports = ttk.Label(recentReportsFrame, text="Recent reports")
 
     userReports = getUserReports(user)
-    print(userReports, user)
 
     for i in userReports:
         report = ReportPreview(recentReportsFrame, i, userReports.index(i))
@@ -52,7 +91,7 @@ def openMainWindow(pastFrame):
     recentReportsFrame.grid(row=2, column=0)
     homeLabel.grid(row=0, column=0)
     homeFrame.grid(row=0, column=0)
-    contentFrame.grid(row=0, column=1, padx=10, pady=10)
+    contentFrame.grid(row=0, column=1, padx=10, pady=10, sticky="nesw", columnspan=10)
 
     mainWindowFrame.grid(row=0, column=0, sticky="nsew")
 
@@ -62,12 +101,13 @@ def openCreateReport(prev):
     prev.grid_forget()
 
     createReportFrame = ttk.Frame(contentFrame)
+    contentFrame.columnconfigure(0, weight=1)
 
     currentFrame = createReportFrame
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
         currentFrame,
     )
     # all inputs needed to create a report
@@ -117,7 +157,7 @@ def reportSuccsess(prev, report):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
         currentFrame,
     )
 
@@ -150,10 +190,11 @@ def openReport(prev, report):
 
     reportFrame = ttk.Frame(contentFrame)
     currentFrame = reportFrame
+    contentFrame.columnconfigure(0, weight=1)
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
         currentFrame,
     )
 
@@ -199,12 +240,18 @@ def openAccount(prev):
     Navigation(
         mainWindowFrame,
         user,
-        [openMainWindow, openCreateReport, openAccount, showSignUp, showSignUp],
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
         currentFrame,
     )
 
     title = ttk.Label(accountFrame, text="Account", font=("Arial", 20, "bold"))
 
+    modifytitle = ttk.Label(
+        accountFrame,
+        text="Change account details",
+        font=("Arial", 13, "bold"),
+        justify="left",
+    )
     usernameFrame = ttk.Frame(accountFrame)
     usernameLabel = ttk.Label(usernameFrame, text="Username")
     userNameInput = ttk.Entry(usernameFrame, textvariable=user["username"])
@@ -221,17 +268,114 @@ def openAccount(prev):
         ),
     )
 
+    signOutLabel = ttk.Label(accountFrame, text="Sign out", font=("Arial", 13, "bold"))
+    signOutButton = ttk.Button(
+        accountFrame,
+        text="Sign out",
+        command=lambda: signOut(user, openWellcome(currentFrame)),
+    )
+
+    deleteAccountLabel = ttk.Label(
+        accountFrame, text="Delete account", font=("Arial", 13, "bold")
+    )
+    deleteAccountButton = ttk.Button(
+        accountFrame,
+        text="Delete account",
+        command=lambda: deleteAccount(user["username"], openWellcome(currentFrame)),
+    )
+
     title.grid(row=0, column=0, columnspan=2)
-    usernameFrame.grid(row=1, column=0)
-    usernameLabel.grid(row=0, column=0)
+    modifytitle.grid(row=1, column=0, columnspan=2)
+    usernameFrame.grid(row=2, column=0, pady=10)
+    usernameLabel.grid(row=0, column=0, padx=10)
     userNameInput.grid(row=0, column=1)
 
-    passwordFrame.grid(row=2, column=0)
-    passwordLabel.grid(row=0, column=0)
+    passwordFrame.grid(row=3, column=0, pady=10)
+    passwordLabel.grid(row=0, column=0, padx=10)
     passwordInput.grid(row=0, column=1)
 
-    saveButton.grid(row=3, column=0, columnspan=2)
+    saveButton.grid(row=4, column=0, columnspan=2, pady=10)
+
+    signOutLabel.grid(row=2, column=1, pady=10, padx=20)
+    signOutButton.grid(row=2, column=2, pady=10, padx=20)
+
+    deleteAccountLabel.grid(row=3, column=1, pady=10, padx=20)
+    deleteAccountButton.grid(row=3, column=2, pady=10, padx=20)
     accountFrame.grid(row=0, column=0)
+
+
+def openUsers(prev):
+    prev.grid_forget()
+
+    usersFrame = ttk.Frame(contentFrame)
+    currentFrame = usersFrame
+    Navigation(
+        mainWindowFrame,
+        user,
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
+        currentFrame,
+    )
+
+    title = ttk.Label(usersFrame, text="Users", font=("Arial", 20, "bold"))
+
+    users = getUsers()
+
+    for i in users:
+        userAccount = UserPreview(usersFrame, i, users.index(i))
+        userAccount.bind("<Button-1>", lambda e, i=i: openUser(i, usersFrame))
+
+    title.grid(row=0, column=0)
+    usersFrame.grid(row=0, column=0)
+
+
+def openUser(userPrev, prev):
+    prev.grid_forget()
+
+    userFrame = ttk.Frame(contentFrame)
+    currentFrame = userFrame
+    contentFrame.columnconfigure(10, weight=1)
+
+    Navigation(
+        mainWindowFrame,
+        user,
+        [openMainWindow, openCreateReport, openAccount, openUsers, showSignUp],
+        currentFrame,
+    )
+
+    title = ttk.Label(userFrame, text=userPrev["username"], font=("Arial", 20, "bold"))
+    userInfoFrame = ttk.Frame(userFrame)
+    role = tk.Label(
+        userInfoFrame,
+        text=userPrev["role"],
+        font=("Arial", 13, "bold"),
+        background="red",
+        foreground="white",
+        padx=10,
+        pady=10,
+    )
+    if userPrev["role"] == "admin":
+        role.config(background="green")
+    else:
+        makeAdminButton = ttk.Button(
+            userInfoFrame,
+            text="Make admin",
+            command=lambda: makeAdmin(userPrev["username"]),
+        )
+
+    reports = getUserReports(userPrev, True)
+    reportsFrameUser = ttk.Frame(userFrame)
+
+    for i in reports:
+        report = ReportPreview(reportsFrameUser, i, reports.index(i))
+        report.bind("<Button-1>", lambda e, i=i: openReport(userFrame, i))
+
+    title.grid(row=0, column=0)
+    role.grid(row=0, column=0)
+    if userPrev["role"] != "admin":
+        makeAdminButton.grid(row=0, column=2)
+    userInfoFrame.grid(row=1, column=0)
+    reportsFrameUser.grid(row=2, column=0)
+    userFrame.grid(row=0, column=0)
 
 
 # The current user
@@ -245,13 +389,16 @@ root = tk.Tk()
 root.geometry("1000x600")
 
 # The frame for the sign up form
-signUpFrame = ttk.Frame(root)
+signUpFrame = tk.Frame(root)
+signUpFrame.columnconfigure(0, weight=1)
 
 # create the form for the signUp
 createAuthForm(signUpFrame, user, openMainWindow, "signUp")
 
 # The frame for the login form
-loginFrame = ttk.Frame(root)
+loginFrame = tk.Frame(root)
+loginFrame.columnconfigure(0, weight=1)
+
 
 # create the form for the login
 createAuthForm(loginFrame, user, openMainWindow, "login")
@@ -269,22 +416,6 @@ wellcomeSubtext = ttk.Label(
     foreground="#e0e0e0",
 )
 
-# container for buttons
-buttonsFrame = ttk.Frame(wellcomeFrame)
-
-# Button for the users to select wether to login or create an account
-loginButton = ttk.Button(buttonsFrame, text="Login", command=showLogin)
-createAccountButton = ttk.Button(
-    buttonsFrame, text="Create Account", command=showSignUp
-)
-
-# render all widgets in grid
-wellcomeLabel.grid(row=0, column=0, columnspan=2, pady=10)
-wellcomeSubtext.grid(row=1, column=0, columnspan=2, pady=10)
-buttonsFrame.grid(row=2, column=0, columnspan=2)
-loginButton.grid(row=0, column=0, padx=10)
-createAccountButton.grid(row=0, column=1, padx=10)
-wellcomeFrame.grid(row=3, column=0, columnspan=2, pady=20)
 
 # Main window
 mainWindowFrame = ttk.Frame(root)
@@ -306,4 +437,7 @@ pywinstyles.change_header_color(
 # Prevent the window from being resized
 root.resizable(False, False)
 
+root.columnconfigure(0, weight=1)
+
+openWellcome(None)
 root.mainloop()

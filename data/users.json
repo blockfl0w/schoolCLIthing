@@ -1,1 +1,12 @@
-[{"username": "blockflow", "role": "user", "password": "$2b$12$QQ4HlWuNQoX0YLPofraZGu6Tfa9Z8ZfRLnzNnCFJyvMa64MT2X2ii"}]
+[
+  {
+    "username": "blockflow",
+    "role": "user",
+    "password": "$2b$12$QQ4HlWuNQoX0YLPofraZGu6Tfa9Z8ZfRLnzNnCFJyvMa64MT2X2ii"
+  },
+  {
+    "username": "admin",
+    "role": "admin",
+    "password": "$2b$12$8rxzeTJwX60SBFMUp6RdOuNqlXZQFDwa7ioQdFSYFQ847JbSFVdIy"
+  }
+]
