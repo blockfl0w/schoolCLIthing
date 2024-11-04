@@ -1,12 +1,1 @@
-[
-  {
-    "username": "blockflow",
-    "role": "user",
-    "password": "$2b$12$QQ4HlWuNQoX0YLPofraZGu6Tfa9Z8ZfRLnzNnCFJyvMa64MT2X2ii"
-  },
-  {
-    "username": "admin",
-    "role": "admin",
-    "password": "$2b$12$8rxzeTJwX60SBFMUp6RdOuNqlXZQFDwa7ioQdFSYFQ847JbSFVdIy"
-  }
-]
+[{"username": "admin", "role": "admin", "password": "$2b$12$8rxzeTJwX60SBFMUp6RdOuNqlXZQFDwa7ioQdFSYFQ847JbSFVdIy"}, {"username": "charlie", "role": "user", "password": "$2b$12$JIxYErC4spnyDUpe.5jpQOAjzKEUH9uh3QTSxEwPp5piy92nAoTCW"}, {"username": "Blockflow", "role": "user", "password": "$2b$12$LCFw9wWuXSQL/ehjMTCxreuDwo5tGJsYmNx/oDFTT9obVOb0UUqwa"}]
